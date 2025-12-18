@@ -74,8 +74,18 @@ jobs:
           path: reports/
           retention-days: 7
 
+      - name: Check if Dependency Track secrets exist
+        id: check_secrets
+        run: |
+          if [ -n "${{ secrets.API_BASE_URL }}" ] && [ -n "${{ secrets.DEPENDENCY_TRACK_API_KEY }}" ] && [ -n "${{ secrets.PROJECT_UUID }}" ]; then
+            echo "secrets_exist=true" >> $GITHUB_OUTPUT
+          else
+            echo "secrets_exist=false" >> $GITHUB_OUTPUT
+            echo "Dependency Track secrets not found, skipping upload"
+          fi
+
       - name: Upload SBOM to Dependency Track
-        if: ${{ secrets.API_BASE_URL && secrets.DEPENDENCY_TRACK_API_KEY && secrets.PROJECT_UUID }}
+        if: steps.check_secrets.outputs.secrets_exist == 'true'
         run: |
           curl -X "POST" "${{ secrets.API_BASE_URL }}/api/v1/bom" \
             -H "Content-Type: multipart/form-data" \
