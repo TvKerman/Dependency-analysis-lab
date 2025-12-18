@@ -7,7 +7,7 @@ export default function Home() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 mb-8">
-            Автор: Перфилин Григорий Александрович
+            Перфилин Григорий Александрович
           </p>
 
           <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg mb-8">
